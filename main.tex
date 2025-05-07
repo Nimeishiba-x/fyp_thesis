@@ -107,10 +107,20 @@ Bachelor of Engineering
 % Abstract %
 %%%%%%%%%%%%
 \section*{Abstract}
-With the expansion of innovative spaces and the growing demand for indoor robot navigation, single Wi-Fi fingerprint-based localization methods, although low-cost and easy to deploy, are susceptible to multipath fading interference and have limited localization accuracy. In contrast, Lightlaser Detection and Ranging (LiDAR) has centimeter-level ranging accuracy, but its high cost and complex deployment limit its large-scale application.\\
-This paper proposes an indoor high-precision localization framework that integrates Wi-Fi fingerprint recognition, deep neural networks (DNNs), LiDAR-inertial measurement unit (IMU) odometers, and extended Kalman filters (EKF). First, DNN is used to perform coarse localization on standardized Wi-Fi fingerprints to obtain preliminary position estimates. Then, a Gmapping-based simultaneous localization and mapping (SLAM) method is used to fuse IMU data, generate an occupancy grid map, and output high-frequency attitude information. Finally, a unified state vector and observation model are constructed, and an EKF prediction-update fusion structure is designed to fuse information from the three sensors to suppress Wi-Fi noise and cumulative drift errors of the IMU\nomenclature{LiDAR}{LightLaser Detection and Ranging}\nomenclature{DNNs}{Deep Neural Networks}\nomenclature{IMU}{Inertial Measurement Unit}\nomenclature{EKF}{Extended Kalman Filter}\nomenclature{SLAM}{Simultaneous Localization and Mapping}.\\
-\noindent Extended Kalman filtering performs state prediction and correction by linearizing the nonlinear state transition and observation equations of the system and combining system dynamics with actual observation data to achieve accurate state estimation. In this study, EKF is used to fuse the attitude information from Wi-Fi, LiDAR, and IMU, significantly improving the robustness and accuracy of the overall localization system in complex environments.\\
-In experiments conducted on the 6th to 8th floors of the IR Building at Xi'an Jiaotong-Liverpool University, comparisons between pure Wi-Fi, pure IMU, and EKF fusion schemes revealed that Wi-Fi localization was subject to significant trajectory fluctuations due to device frequency limitations and environmental interference, resulting in limited localization accuracy. Meanwhile, IMU trajectories exhibited gradually declining localization accuracy due to cumulative errors and gradual drift. In contrast, the EKF fusion scheme demonstrated better smoothness and stability, effectively suppressing Wi-Fi and IMU errors and maintaining high accuracy and robustness. Experimental results indicate that the EKF fusion scheme maintains trajectory stability in complex environments, validating its adaptability. It also demonstrates significantly lower localization errors than single-source solutions, proving the effectiveness of multi-source information fusion in enhancing localization accuracy and system stability.\\
+With the expansion of innovative spaces and the growing demand for indoor robot navigation, single Wi-Fi fingerprint-based localization methods, although low-cost and easy to deploy, are susceptible to multipath fading interference and have limited localization accuracy. In contrast, Lightlaser Detection and Ranging (LiDAR) has centimeter-level ranging accuracy, but its high cost and complex deployment limit its large-scale application.
+
+\noindent This thesis proposes an indoor high-precision localization framework that integrates Wi-Fi fingerprint recognition, deep neural networks (DNNs), LiDAR-inertial measurement unit (IMU) odometers, and extended Kalman filters (EKF). First, DNN is used to perform coarse localization on standardized Wi-Fi fingerprints to obtain preliminary position estimates. Then, a Gmapping-based simultaneous localization and mapping (SLAM) method is used to fuse IMU data, generate an occupancy grid map, and output high-frequency attitude information. Finally, a unified state vector and observation model are constructed, and an EKF prediction-update fusion structure is designed to fuse information from the three sensors to suppress Wi-Fi noise and cumulative drift errors of the IMU.
+
+\nomenclature{LiDAR}{LightLaser Detection and Ranging}
+\nomenclature{DNNs}{Deep Neural Networks}
+\nomenclature{IMU}{Inertial Measurement Unit}
+\nomenclature{EKF}{Extended Kalman Filter}
+\nomenclature{SLAM}{Simultaneous Localization and Mapping}
+
+\noindent Extended Kalman filtering performs state prediction and correction by linearizing the nonlinear state transition and observation equations of the system and combining system dynamics with actual observation data to achieve accurate state estimation. In this study, EKF is used to fuse the attitude information from Wi-Fi, LiDAR, and IMU, significantly improving the robustness and accuracy of the overall localization system in complex environments.
+
+\noindent In experiments conducted on the 6th to 8th floors of the IR Building at Xi'an Jiaotong-Liverpool University, comparisons between pure Wi-Fi, pure IMU, and EKF fusion schemes revealed that Wi-Fi localization was subject to significant trajectory fluctuations due to device frequency limitations and environmental interference, resulting in limited localization accuracy. Meanwhile, IMU trajectories exhibited gradually declining localization accuracy due to cumulative errors and gradual drift. In contrast, the EKF fusion scheme demonstrated better smoothness and stability, effectively suppressing Wi-Fi and IMU errors and maintaining high accuracy and robustness. Experimental results indicate that the EKF fusion scheme maintains trajectory stability in complex environments, validating its adaptability. It also demonstrates significantly lower localization errors than single-source solutions, proving the effectiveness of multi-source information fusion in enhancing localization accuracy and system stability.
+
 
 
 \noindent\textbf{Keywords:} 
@@ -157,7 +167,8 @@ Finally, I would like to express my deepest gratitude to my parents. Without my 
 \pagenumbering{arabic}
 \section{Introduction}
 Global Positioning System (GPS) \nomenclature{GPS}{Global Positioning System} is widely known for its high accuracy and broad applicability in outdoor environments. However, its limitations in indoor environments have also been well documented \cite{wahab2022indoor}. GPS signals are transmitted by satellites and face significant challenges in indoor spaces because they must penetrate physical obstacles such as walls and ceilings. The complexity of this transmission path causes severe signal attenuation, making it challenging to maintain a stable connection. In addition, multipath interference caused by reflections from surfaces such as walls and metal objects introduces additional time delays and computational errors, further reducing localization accuracy \cite{wahab2022indoor}. These challenges have prompted researchers to develop alternative indoor localization technologies aimed at overcoming these limitations and providing accurate and efficient solutions for indoor environments.\\
-With the continuous development of modern indoor localization technologies, including Wi-Fi, Bluetooth Low Energy (BLE), Ultra Wide Band (UWB), and inertial measurement units (IMUs), significant progress has been made in many fields \cite{guo2019survey}. These technologies have significantly improved the accuracy and efficiency of indoor localization by adopting advanced methods such as triangulation, fingerprint recognition, and sensor fusion. As shown in \autoref{fig:Illustration of UWB and Wi-Fi hybrid localization system}, a typical UWB and Wi-Fi hybrid localization system contains a variety of observation data.\\
+With the continuous development of modern indoor localization technologies, including Wi-Fi, Bluetooth Low Energy (BLE), Ultra Wide Band (UWB), and inertial measurement units (IMUs), significant progress has been made in many fields \cite{guo2019survey}. These technologies have significantly improved the accuracy and efficiency of indoor localization by adopting advanced methods such as triangulation, fingerprint recognition, and sensor fusion. As shown in \autoref{fig:Illustration of UWB and Wi-Fi hybrid localization system}, a typical UWB and Wi-Fi hybrid localization system contains a variety of observation data.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{images/intro.png}
@@ -167,10 +178,11 @@ With the continuous development of modern indoor localization technologies, incl
 \noindent In addition, indoor localization technology is widely used in the medical field for hospital material management and medical resource tracking, thereby improving the efficiency of medical services \cite {HOSSAIN20151}. Similarly, emergency responders (such as firefighters) use these technologies to navigate in complex and unfamiliar environments, significantly improving task efficiency and safety \cite {fischer2010location}. In addition, recent advances have expanded the application of indoor localization systems to smart cities, helping urban infrastructure management and public safety through real-time tracking and monitoring of assets and personnel \cite{zhang2020smartcity}. These technologies have also shown significant results in the retail industry, improving the customer experience through location-based services (such as precision marketing and inventory management) \cite{chen2019indoor}.\\
 Due to the limitations of GPS in indoor environments, indoor localization technology has become a key solution for achieving high-precision localization due to its flexibility, adaptability, and wide range of applications. In the following section, I introduce a new indoor localization solution and briefly describe how it is based on Wi-Fi fingerprinting, SLAM and Lidar fusion, and EKF technology.
 \subsection{Problem Statement}
-Currently, common indoor localization technologies each have their own characteristics and limitations. UWB technology measures the propagation time by sending high-frequency pulse signals and has extremely high localization accuracy \cite{fontana2004recent}. However, walls and obstacles easily block UWB radio frequency signals, and signals can rapidly attenuate, especially in indoor environments where multipath effects are significant. In addition, UWB technology requires high hardware costs and dense installation infrastructure, limiting its popularity in certain applications \cite{farahsari2022survey}.\\
+Currently, typical indoor localization technologies each have their characteristics and limitations. UWB technology measures the propagation time by sending high-frequency pulse signals and has exceptionally high localization accuracy \cite{fontana2004recent}. However, walls and obstacles easily block UWB radio frequency signals, and signals can rapidly attenuate, especially in indoor environments where multipath effects are significant. In addition, UWB technology requires high hardware costs and dense installation infrastructure, limiting its popularity in specific applications \cite{farahsari2022survey}.\\
 Wi-Fi localization is a low-cost and easy-to-deploy indoor localization technology that mainly uses Wi-Fi fingerprinting or time difference of arrival (TDOA) methods to achieve localization \cite{yiu2017wireless,gustafsson2003positioning}. However, Wi-Fi fingerprinting requires pre-measurement of signal strength at different locations and the establishment of a fingerprint database, which is a time-consuming and complex process. In addition, Wi-Fi signals are susceptible to multipath effects and obstacles, resulting in reduced localization accuracy in complex indoor environments.\\
 IMU localization technology estimates the displacement and attitude of an object by measuring acceleration and angular velocity. Classic IMU localization methods include physical methods (such as double integration) \cite{yan2018ridi}, dead reckoning methods \cite{jirawimut2003method}, Kalman filtering \cite{caron2006gps}, and sensor fusion methods \cite{dehzangi2017imu}. However, these methods are susceptible to error accumulation (such as drift effects) during long-term use, resulting in a gradual decrease in localization accuracy. Nevertheless, IMU localization technology has high accuracy and real-time performance in a short period of time, making it particularly suitable for fast localization tasks in dynamic environments \cite{marins2001improved}. In addition, IMU technology does not rely on external infrastructure and has strong independence and reliability, making it particularly suitable for use in environments where GPS signals cannot be received, such as underground facilities, tunnels, or indoors \cite{wu2015indoor}.\\
-Single indoor localization technologies have their advantages and disadvantages, but by integrating multiple sensor data, especially Wi-Fi and IMU, their limitations can be effectively compensated for, thereby achieving longer, more continuous, and more accurate localization. Currently, most research focuses on PDR/Wi-Fi fusion localization methods \cite{liu2021kalman}, but IMU/Wi-Fi fusion methods based on EKF are still rare.\\
+Single indoor localization technologies have their advantages and disadvantages, but by integrating multiple sensor data, especially Wi-Fi and IMU, their limitations can be effectively compensated for, thereby achieving longer, more continuous, and more accurate localization. Currently, most research focuses on PDR/Wi-Fi fusion localization methods \cite{liu2021kalman}, but IMU/Wi-Fi fusion methods based on EKF are still rare.
+
 \subsection{Contributions}
 The objective of this study is to develop a new indoor localization system that combines Wi-Fi, Lidar, and EKF technologies to improve localization accuracy in dynamic environments. Specifically, this study addresses the limitations of existing technologies in terms of accuracy and adaptability, providing a more powerful solution suitable for complex indoor environments.
 \begin{itemize}
@@ -188,9 +200,9 @@ This thesis is divided into six parts. The first part is the introduction, which
 In recent years, indoor localization technology has gradually become a hot topic of research in academia and industry due to its key role in applications such as smart city construction, indoor navigation, and the Internet of Things (IoT)\nomenclature{IOT}{Internet of Things}. The performance of localization systems in terms of accuracy, robustness, and system scalability directly affects their usability and deployment efficiency in real-world scenarios. With the continuous advancement of sensor technology, wireless communication, and intelligent algorithms, research in this field is showing a multidimensional trend toward integration, intelligence, and high precision.
 \subsection{Advances in indoor localization technology without calibration}
 Traditional indoor localization methods, such as Wi-Fi or Bluetooth-based fingerprinting systems, typically rely on prior site surveys to construct radio frequency (RF) maps. This process is both time-consuming and labor-intensive, and highly sensitive to environmental changes, limiting its scalability and adaptability \cite{liu2020survey}. Additionally, as environmental factors change (e.g., furniture rearrangement), the data from site surveys often becomes outdated, significantly impacting system performance \cite{jiang2019indoor}.\\
-To overcome these limitations, researchers have proposed calibration-free indoor localization systems. These systems avoid cumbersome site surveys by constructing RF maps using existing infrastructure or with the implicit participation of users, thereby greatly reducing deployment time and costs while improving system flexibility in dynamic environments \cite{HOSSAIN20151,li2018calibrationfree}.
+To overcome these limitations, researchers have proposed calibration-free indoor localization systems. These systems avoid cumbersome site surveys by constructing RF maps using existing infrastructure or with the implicit participation of users, thereby greatly reducing deployment time and costs while improving system flexibility in dynamic environments \cite{HOSSAIN20151,li2018calibrationfree}.\\
 Although systems that do not require calibration offer significant advantages, they still face challenges in adapting to environmental changes and handling device heterogeneity. As emphasized by Hossain and Soh, changes in the physical environment and differences in device hardware can affect the accuracy of localization systems, posing a significant challenge for current technologies \cite{HOSSAIN20151}. To address these issues, researchers have proposed several improvements, including dynamically updating RF maps and using advanced optimization algorithms to enhance system robustness and reliability \cite{zhang2020robust}.\\
-Advances in these technologies have enabled calibration-free indoor localization technologies to be widely used in complex commercial and public environments. For example, in large shopping malls, hospitals, museums, and multi-story office buildings, the deployment and long-term maintenance of traditional localization methods are difficult due to complex building structures, high personnel mobility, and wireless signal interference. However, calibration-free systems can quickly adapt to these changing environments and provide accurate localization services by utilizing existing wireless infrastructure (such as Wi-Fi or Bluetooth) and data from mobile devices (such as smartphones) \cite{laoudias2018survey,xu2019wireless}.\\
+Advances in these technologies have enabled calibration-free indoor localization technologies to be widely used in complex commercial and public environments. For example, in large shopping malls, hospitals, museums, and multi-story office buildings, the deployment and long-term maintenance of traditional localization methods are difficult due to complex building structures, high personnel mobility, and wireless signal interference. However, calibration-free systems can quickly adapt to these changing environments and provide accurate localization services by utilizing existing wireless infrastructure (such as Wi-Fi or Bluetooth) and data from mobile devices (such as smartphones) \cite{laoudias2018survey,xu2019wireless}.
 \subsection{Construction and application of long-time data sets}
 One of the core challenges facing indoor localization research is the volatility of signal strength over time. Factors such as access point configuration changes, dynamic environmental changes (e.g., crowd density, furniture movement), and device heterogeneity can significantly affect the stability and accuracy of traditional fingerprint-based localization systems \cite{liu2020survey}. Therefore, how to maintain localization accuracy in dynamic environments over long periods of time has become an urgent issue.
 In response to this challenge, recent research has emphasized the importance of building long-term datasets to capture the evolution of signals over time. Mendoza-Silva et al.\ \cite{data3010003} provided a Wi-Fi fingerprint dataset collected over 15 months, systematically revealing the long-term impact of factors such as network device replacement and environmental structure changes on the performance of localization systems. The study shows that incorporating long-term signal data into a fingerprint database and updating it dynamically can significantly improve the system's ability to adapt to environmental changes, thereby reducing localization errors caused by signal attenuation or configuration drift.
@@ -203,7 +215,7 @@ Traditional fingerprint localization methods rely on a pre-collected signal stre
 In contrast, deep learning methods can learn robust spatial features from heterogeneous sensor data with the help of neural networks and adapt to environmental changes through incremental learning or online updates, thereby effectively maintaining localization accuracy. For example, Nowicki and Wietrzykowski proposed a CNN-based Wi-Fi fingerprint localization method that outperformed traditional methods in multiple scenarios \cite{nowicki2017ml}. In addition, Zhou et al. introduced long short-term memory (LSTM) networks to perform time modelling of multi-sensor signals, achieving real-time adaptive localization in complex dynamic environments \cite{zhou2022deep}.
 \subsection{Extended kalman filter in indoor localization}
 Extended Kalman filters are widely used in indoor localization systems as real-time recursive estimators that can fuse noisy, asynchronous, and multimodal sensor data within a probabilistic framework. Unlike the standard Kalman filter, which is only applicable to linear systems, the EKF linearizes nonlinear motion and observation models through a first-order Taylor expansion, enabling it to handle nonlinear motion and observation models. This makes it particularly suitable for indoor environments, where user trajectories, sensor measurements, and signal propagation are inherently nonlinear \cite{barrau2015non}.\\
-In Wi-Fi-based localization scenarios, EKF is often used to refine location estimates based on noisy RSSI or channel state information observations. When fused with other modalities such as IMU and Lidar, EKF can integrate absolute and relative localization information, thereby improving localization accuracy and temporal continuity \cite{laoudias2018survey}. For instance, the WIO-EKF method proposed by Zhou and Wang (2023) combines Wi-Fi fingerprint and IMU data \cite{10496456}. It fuses them using EKF to provide more accurate and continuous pedestrian localization. The innovation of this method lies in that it not only solves the initial heading error problem of IMU, but also enhances the localization results using Wi-Fi fingerprint data. Specifically, the WIO-EKF method first enhances Wi-Fi fingerprint data using the CDAELoc model (a regression network based on convolutional denoising autoencoders)\nomenclature{CDAE}{Convolutional Denoising Autoencoders} to improve the robustness of Wi-Fi localization in noisy environments. Then, the DbDIO model (a dual-branch deep inertial odometer network) \nomenclature{DbDIO}{Dual-branch Deep Inertial Odometer}is used to process IMU data and accurately extract features of different scales. The prediction results of these models are input as system observations into the EKF, thereby reducing the initial heading error of the IMU system.
+In Wi-Fi-based localization scenarios, EKF is often used to refine location estimates based on noisy RSSI or channel state information observations. When fused with other modalities such as IMU and Lidar, EKF can integrate absolute and relative localization information, thereby improving localization accuracy and temporal continuity \cite{laoudias2018survey}. For instance, the WIO-EKF method proposed by Zhou and Wang (2023) combines Wi-Fi fingerprint and IMU data \cite{zhou2024wio}. It fuses them using EKF to provide more accurate and continuous pedestrian localization. The innovation of this method lies in that it not only solves the initial heading error problem of IMU, but also enhances the localization results using Wi-Fi fingerprint data. Specifically, the WIO-EKF method first enhances Wi-Fi fingerprint data using the CDAELoc model (a regression network based on convolutional denoising autoencoders)\nomenclature{CDAE}{Convolutional Denoising Autoencoders} to improve the robustness of Wi-Fi localization in noisy environments. Then, the DbDIO model (a dual-branch deep inertial odometer network) \nomenclature{DbDIO}{Dual-branch Deep Inertial Odometer}is used to process IMU data and accurately extract features of different scales. The prediction results of these models are input as system observations into the EKF, thereby reducing the initial heading error of the IMU system.
 \subsection{Multisensor fusion technology in indoor localization systems}
 With the continuous evolution of indoor localization technology, traditional localization methods that rely on a single signal source face significant challenges in terms of accuracy and robustness in complex environments. In order to improve the stability and adaptability of the system in dynamic and interference-prone environments, multi-sensor fusion technology has gradually become an important direction for indoor localization system research and application. This technology integrates data sources from different types of sensors to achieve more accurate, continuous, and robust estimation of the target location.\\
 Multi-sensor fusion can be categorized into three typical architectures: data-level fusion, feature-level fusion, and decision-level fusion. Data-level fusion directly integrates raw sensor data, retaining the most complete information, but requires high time synchronization and noise robustness. Feature-level fusion combines features extracted independently by each sensor, balancing complexity and efficiency. Decision-level fusion performs final estimation through weighted voting or filtering strategies after each subsystem completes localization inference, and is suitable for heterogeneous or distributed systems \cite{zafari2019survey}.\\
@@ -211,8 +223,8 @@ Currently, multi-sensor fusion is mainly reflected in several key application pa
 Although fusion technology has significantly improved the performance of localization systems, many challenges remain \cite{zafari2019survey}. First, the issues of time synchronization, coordinate alignment, and scale consistency between different sensors have not been completely resolved. Second, given the limited computing power of mobile devices, the computational complexity and energy efficiency optimisation of fusion algorithms still need to be balanced. Finally, multi-sensor systems face practical deployment challenges such as data heterogeneity and outlier handling, which affect their feasibility in large-scale, low-cost application scenarios.
 \section{Methodology}
 \subsection{Data processing and integration process}
-In order to achieve a high-precision and robust indoor localization system, this paper designs and implements a localization method framework that integrates information from multiple sensors. The overall process covers the entire process from raw data collection and information fusion processing to localization result optimization. The system uses multiple sensors such as Wi-Fi, Lidar, and IMU for collaborative localization, and realizes multi-source data fusion and optimization estimation through the EKF algorithm.\\
-The entire data acquisition and fusion process is divided into several steps: First, data from different sensors (such as Wi-Fi signals, SLAM maps, and IMU data) are collected, preprocessed, and stored in a database. Then, these data are fused and optimized through the EKF algorithm to ultimately achieve accurate localization estimation. \autoref{fig:Flowchart of multi-sensor localization system} shows the detailed steps of data acquisition, sensor data fusion, and localization result optimization.\nomenclature{ROS}{Robot Operating System}.\\
+In order to achieve a high-precision and robust indoor localization system, this thesis designs and implements a localization method framework that integrates information from multiple sensors. The overall process covers the entire process from raw data collection and information fusion processing to localization result optimization. The system uses multiple sensors such as Wi-Fi, Lidar, and IMU for collaborative localization, and realizes multi-source data fusion and optimization estimation through the EKF algorithm.\\
+The entire data acquisition and fusion process is divided into several steps: First, data from different sensors (such as Wi-Fi signals, SLAM maps, and IMU data) are collected, preprocessed, and stored in a database. Then, these data are fused and optimized through the EKF algorithm to ultimately achieve accurate localization estimation. \autoref{fig:Flowchart of multi-sensor localization system} shows the detailed steps of data acquisition, sensor data fusion, and localization result optimization\nomenclature{ROS}{Robot Operating System}.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{images/Overview_plus.png}
@@ -238,7 +250,7 @@ As shown in the \autoref{fig:Workflow of the Wi-Fi Fingerprint-Based DNN Localiz
     \caption{Workflow of the Wi-Fi Fingerprint-Based DNN Localization Framework.}
     \label{fig:Workflow of the Wi-Fi Fingerprint-Based DNN Localization Framework}
 \end{figure}
-\noindent First, the system loads a pre-built fingerprint database, which contains RSSI vectors collected at different reference points and their corresponding physical coordinate labels. To improve modelling quality and convergence stability, the raw data is preprocessed, including missing value filling, feature normalization, and outlier removal. After preprocessing, the data is divided into training and testing sets for subsequent model learning and generalization capability verification.\\
+\noindent First, the system loads a pre-built fingerprint database, which contains RSSI vectors collected at different reference points and their corresponding physical coordinate labels. To improve modelling quality and convergence stability, the raw data is preprocessed, including missing value filling, feature normalization, and outlier removal. After preprocessing, the data is divided into training and testing sets for subsequent model learning and generalization capability verification.
 
 \noindent In the modelling phase, this study designed a multi-layer feedforward neural network structure to extract spatial features from high-dimensional RSSI fingerprints and perform location regression prediction. The model consists of multiple linear layers, Rectified Linear Unit (ReLU), and dropout layers, constructed using a layered stacking method of “Linear-ReLU-Dropout.” The input dimension of the network is 219, corresponding to the number of active access points (AP) \nomenclature{AP}{Access Point}, and the output is a two-dimensional coordinate value (x, y). The complete network layer structure is shown in the \autoref{tab:wifi_dnn_structure}. This structure can effectively extract potential spatial distribution patterns in the signal space and achieve mapping from the signal domain to the physical domain.
 \nomenclature{ReLU}{Rectified Linear Unit}
@@ -296,7 +308,7 @@ In the modelling process, IMU observation data is represented as:
 where, $\boldsymbol{\alpha}_{\text{meas}}$ denotes the observed acceleration, $\boldsymbol{\alpha}_{\text{true}}$ denotes the true acceleration, ${b}_\alpha$ denotes the zero bias, and ${n}_\alpha$ denotes the noise term. Similarly, $\boldsymbol{\omega}_{\text{meas}}$ represents the measured angular velocity, $\boldsymbol{\omega}_{\text{true}}$ is the true angular velocity, ${b}_\omega$ is the corresponding bias, and ${n}_\omega$ accounts for measurement noise. These sources of error are modelled and corrected during the fusion stage using the EKF to improve localization stability and accuracy. The high sampling frequency of the IMU enables it to effectively compensate for the shortcomings of Lidar in short-term motion estimation, improving the localization continuity and robustness of the system in highly dynamic environments.\\
 Overall, the integration of SLAM and IMU not only provides a solid foundation for the system to construct an environmental map and provide continuous trajectory estimation, but also provides structured and dynamic compensation multi-source perception support for subsequent fusion optimization with Wi-Fi trajectories.
 \subsection{Multi-Sensor fusion via Extended Kalman Filter}
-This study further constructs a fusion framework based on the EKF to achieve effective coordination and information complementarity among subsystems. The fusion model is centered on state space modeling, integrating pose information from Wi-Fi fingerprint localization, SLAM module outputs, and short-term high-frequency motion observations provided by IMU sensors to achieve dynamic estimation and real-time correction of the platform state.\\
+This study further constructs a fusion framework based on the EKF to achieve effective coordination and information complementarity among subsystems. The fusion model is centered on state space modelling, integrating pose information from Wi-Fi fingerprint localization, SLAM module outputs, and short-term high-frequency motion observations provided by IMU sensors to achieve dynamic estimation and real-time correction of the platform state.\\
 In the specific implementation, the EKF models the nonlinear motion system as a recursive prediction-update structure, alternately completing the two stages of state estimation and observation correction. The prediction stage infers the future state of the system based on the state at the previous moment and the control input, while the update stage corrects the state based on sensor observations, thereby continuously improving the estimation accuracy. This filtering structure has been widely applied in multi-sensor fusion localization and demonstrates good robustness in addressing issues such as IMU drift and RSSI instability \cite{zhuang2023multi}.\\
 The recursive process of the overall state estimation is shown in the \autoref{fig:EKF State Prediction and Observation Update Flowchart} below.
 \begin{figure}[H]
@@ -402,7 +414,7 @@ y_k
 \end{bmatrix} + \mathbf{v}_k
 \label{eq:observation_model}
 \end{equation}
-where \(\mathbf{z}_k \in \mathbb{R}^2\) representing a two-dimensional real-valued vector, consists of position observations from either the Wi-Fi fingerprint module or the SLAM system. $h(\mathbf{X}_k)$ is a nonlinear observation function, $\mathbf{v}_k$ is zero-mean Gaussian noise with covariance $R_k$. In this study, we assume that the observations are the positions of the platform on a two-dimensional map, so the observation function is:
+where \(\mathbf{z}_k \in \mathbb{R}^2\) represents a two-dimensional real-valued vector, consists of position observations from either the Wi-Fi fingerprint module or the SLAM system. $h(\mathbf{X}_k)$ is a nonlinear observation function, $\mathbf{v}_k$ is zero-mean Gaussian noise with covariance $R_k$. In this study, we assume that the observations are the positions of the platform on a two-dimensional map, so the observation function is:
 \begin{equation}
 h(\mathbf{X}_k) = 
 \begin{bmatrix}
@@ -470,7 +482,7 @@ Through the above update steps, EKF can dynamically correct the platform status 
 Ultimately, the system can output continuous, smooth, and accurate position and attitude estimation results in real time in complex dynamic environments, achieving an organic integration of the global consistency provided by Wi-Fi and the local high-frequency dynamic perception of IMU, significantly enhancing the robustness and stability of the localization system under sensor uncertainty and environmental disturbances.
 \subsubsection{Performance evaluation}
 After completing the EKF fusion, we obtained the trajectory map after Wi-Fi, IMU, and SLAM data fusion using EKF. To further enhance the reliability of the experimental results and quantify the accuracy of the localization system after the fusion of different sensor data, this study introduced the mean squared error (MSE) and mean absolute error (MAE) as performance evaluation indicators. These two indicators reflect the accuracy and robustness of the localization system from different perspectives, thereby providing strong quantitative support for the effectiveness of multi-source data fusion.\\
-MSE and MAE are widely used error evaluation standards in current indoor localization research, especially suitable for fingerprint localization and multi-sensor fusion scenarios, and have been widely verified by multiple studies for their effectiveness and universality \cite{sun2019fusion, he2016wifi}.
+MSE and MAE are widely used error evaluation standards in current indoor localization research, especially suitable for fingerprint localization and multi-sensor fusion scenarios, and have been widely verified by multiple studies for their effectiveness and universality \cite{sun2019fusion, he2015wi}.
 \begin{equation}
 \text{MSE} = \frac{1}{N} \sum_{i=1}^{N} \left( x_{\text{true}, i} - x_{\text{pred}, i} \right)^2 + \left( y_{\text{true}, i} - y_{\text{pred}, i} \right)^2
 \label{MSE}
@@ -482,7 +494,7 @@ The mean absolute error is used to measure the absolute magnitude of the differe
 \label{MAE}
 \end{equation}
 where $\left| \,\cdot\, \right|$ denotes absolute value, and the meanings of other symbols are consistent with those in \autoref{MSE}.\\
-After calculating the error of the entire trajectory, in order to further analyse the localization accuracy of the system at certain moments, we also used a local magnification to show the specific situation at the point of maximum error. By magnifying the displayed area, we can clearly see the error between Wi-Fi and IMU and EKF, and further compare the performance of different sensors at specific locations, especially in areas where Wi-Fi localization errors are large. In order to quantitatively evaluate these errors, we used the following error calculation formula:
+After calculating the error of the entire trajectory, in order to further analyse the localization accuracy of the system at certain moments, we also used a local magnification to show the specific situation at the point of maximum error. By magnifying the displayed area, we can clearly see the error between Wi-Fi and IMU and EKF, and further compare the performance of different sensors at specific locations, especially in areas where Wi-Fi localization errors are significant. In order to quantitatively evaluate these errors, we used the following error calculation formula:
 \begin{equation}
 \text{Wi-Fi Error} = \sqrt{(x_{\text{EKF}}(t) - x_{\text{WiFi}}(t))^2 + (y_{\text{EKF}}(t) - y_{\text{WiFi}}(t))^2}
 \end{equation}
@@ -506,16 +518,16 @@ During the experiments, the platform followed a predefined trajectory while simu
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\linewidth]{images/IR_half_circle.png}
-    \caption{First phase indoor localization experimental path}
+    \caption{First phase indoor localization experimental path.}
     \label{fig:First phase indoor localization experimental path}
 \end{figure}
 The first phase of the experiment was conducted in similar corridor areas on the 6th, 7th, and 8th floors of the IR building. To ensure a comprehensive evaluation of the performance of different sensors, we conducted experiments in the same areas across the three floors (as shown in the \autoref{fig:First phase indoor localization experimental path}), obtaining three sets of path maps that demonstrate the experimental results for the three floors. Each set of graphs shows the trajectories of Wi-Fi localization, IMU localization, and EKF fusion localization, which are distinguished by different colours and line types. The blue trajectory represents the results after EKF fusion, the orange dotted line represents Wi-Fi localization, and the green dotted line represents IMU localization results\nomenclature{MAE}{Mean Absolute Error}.\\
-As shown in the \autoref{fig:Comparison of experimental trajectories on the 6th floor}, the trajectories obtained using the Wi-Fi, IMU, and EKF fusion method are displayed. In the Wi-Fi localization results, due to the influence of signal obstruction and reflection in the environment, the localization trajectory showed apparent deviations, indicating that Wi-Fi localization is susceptible to multipath propagation and signal attenuation in indoor environments. The IMU localization results showed significant errors, especially when the platform was moving quickly or turning, as the IMU system errors tended to accumulate, leading to a decrease in localization accuracy. In contrast, the EKF fusion method effectively combines the data advantages of Wi-Fi and IMU, providing smoother and more accurate trajectories through multiple corrections of state estimates and sensor data.
+As shown in the \autoref{fig:Comparison of experimental trajectories on the 7th floor}, the trajectories obtained using the Wi-Fi, IMU, and EKF fusion method are displayed. In the Wi-Fi localization results, due to the influence of signal obstruction and reflection in the environment, the localization trajectory showed apparent deviations, indicating that Wi-Fi localization is susceptible to multipath propagation and signal attenuation in indoor environments. The IMU localization results showed significant errors, especially when the platform was moving quickly or turning, as the IMU system errors tended to accumulate, leading to a decrease in localization accuracy. In contrast, the EKF fusion method effectively combines the data advantages of Wi-Fi and IMU, providing smoother and more accurate trajectories through multiple corrections of state estimates and sensor data.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\linewidth]{images/1/2.png}
-    \caption{Comparison of experimental trajectories on the 7th floor}
-    \label{fig:Comparison of experimental trajectories on the 6th floor}
+    \caption{Comparison of experimental trajectories on the 7th floor.}
+    \label{fig:Comparison of experimental trajectories on the 7th floor}
 \end{figure}
 \noindent \autoref{tab:7th_floor_accuracy} shows the MSE and MAE calculated for this experiment relative to the EKF fusion method. For Wi-Fi localization, the experimental results show that the MAE of Wi-Fi is 1.1159 and the MSE is 1.9694, indicating that compared to EKF, Wi-Fi localization has a larger deviation and fluctuation in estimating spatial coordinates. The MAE of IMU localization is 0.9208, and the MSE is 1.8722, showing that IMU can provide relatively stable motion estimates in a short period of time. However, in long-term localization tasks, the error is still large, especially in rapidly changing environments.
 \begin{table}[H]
@@ -536,14 +548,15 @@ EKF (w.r.t Ground Truth)    & 0.5690 & 0.9070 \\
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{Amplification images/wifi/half_circle_large_diff.png}
-    \caption{Amplified image of the error in the comparison of the experimental trajectories on the 7th floor}
+    \caption{Amplified image of the error in the comparison of the experimental trajectories on the 7th floor.}
     \label{fig:Error amplification diagram 7th}
 \end{figure}
-\noindent The following section presents the results of the experiment conducted on the 6th floor of the IR Building. Similar to the experiment on the 7th floor, this experiment compared the localization accuracy of different sensors and EKF under the same path conditions in this environment to evaluate the performance of different sensors and fusion methods in this environment.\\
+\noindent The following section presents the results of the experiment conducted on the 6th floor of the IR Building. Similar to the experiment on the 7th floor, this experiment compared the localization accuracy of different sensors and EKF under the same path conditions in this environment to evaluate the performance of different sensors and fusion methods in this environment.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\linewidth]{images/1/4.png}
-    \caption{Comparison of experimental trajectories on the 6th floor}
+    \caption{Comparison of experimental trajectories on the 6th floor.}
     \label{fig:Comparison of experimental trajectories on the 6th floor}
 \end{figure}
 \noindent As can be seen from the \autoref{fig:Comparison of experimental trajectories on the 6th floor}, the trajectory results obtained on the 6th floor of the IR building are similar to the experimental results on the 7th floor. The drift of the Wi-Fi localization trajectory is relatively small, but due to signal frequency limitations, the trajectory still exhibits some smoothness issues. IMU localization showed a significant decrease in localization accuracy when turning corners. The EKF method effectively combines the advantages of Wi-Fi and IMU to provide a smoother and more accurate trajectory.\\
@@ -568,16 +581,16 @@ EKF (w.r.t Ground Truth) & 0.697 & 1.144 \\
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{Amplification images/wifi/half_circle_low_diff.png}
-    \caption{Amplified image of the error in the comparison of the experimental trajectories on the 6th floor}
+    \caption{Amplified image of the error in the comparison of the experimental trajectories on the 6th floor.}
      \label{fig:Error amplification diagram 6th}
 \end{figure}
 \noindent After completing the experimental analysis of the sixth and seventh floors, in order to further verify the generalization ability of the EKF fusion method, we conducted the same experiment on the eighth floor of the IR building.\\
-As shown in the \autoref{fig:Comparison of experimental trajectories on the 6th floor} of the experimental results on the 8th floor of the IR building, Wi-Fi localization is still affected by the signal environment, exhibiting a certain degree of drift, and the trajectory error is greater than that on the 6th floor. In addition, IMU localization is still inaccurate when turning corners and cannot stably capture the movement of the platform. In contrast, the EKF method effectively integrates Wi-Fi and IMU data, significantly improving localization performance and demonstrating greater robustness and stability in complex environments.
+As shown in the \autoref{fig:Comparison of experimental trajectories on the 8th floor} of the experimental results on the 8th floor of the IR building, Wi-Fi localization is still affected by the signal environment, exhibiting a certain degree of drift, and the trajectory error is greater than that on the 6th floor. In addition, IMU localization is still inaccurate when turning corners and cannot stably capture the movement of the platform. In contrast, the EKF method effectively integrates Wi-Fi and IMU data, significantly improving localization performance and demonstrating greater robustness and stability in complex environments.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\linewidth]{images/1/1.png}
-    \caption{Comparison of experimental trajectories on the 8th floor}
-    \label{fig:Comparison of experimental trajectories on the 6th floor}
+    \caption{Comparison of experimental trajectories on the 8th floor.}
+    \label{fig:Comparison of experimental trajectories on the 8th floor}
 \end{figure}
 \noindent As shown in \autoref{tab:8thfloor_error}, in the experiment on the 8th floor of the IR building, the MAE of Wi-Fi localization was 0.5846 and the MSE was 0.8358, indicating that the error of Wi-Fi localization varied greatly, with good and bad localization effects and considerable instability. This instability may be closely related to changes in the signal environment (such as signal obstruction and reflection), resulting in significant differences in the performance of Wi-Fi localization in different areas.\\
 In contrast, the error variation range of the IMU is relatively small, with an MAE of 0.8645 and an MSE of 1.7970, indicating that the IMU maintains a relatively stable error level throughout the experiment. However, due to the inherent limitations of the sensors, the IMU's accuracy does not improve significantly in complex dynamic environments (such as when turning), resulting in larger errors, particularly during rapid movements.
@@ -598,8 +611,8 @@ EKF (w.r.t Ground Truth) & 0.740 & 1.551 \\
 \noindent Based on the results of local magnification (\autoref{fig:Error amplification diagram 8th}), we conclude that the EKF method can effectively combine the advantages of Wi-Fi and IMU in similar environments on different floors. Through multiple corrections of sensor data, EKF significantly reduces the accumulation of errors and provides a smoother and more accurate localization trajectory.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.1\linewidth]{Amplification images/wifi/half_circle.png}
-    \caption{Amplified image of the error in the comparison of the experimental trajectories on the 8th floor}
+    \includegraphics[width=1\linewidth]{Amplification images/wifi/half_circle.png}
+    \caption{Amplified image of the error in the comparison of the experimental trajectories on the 8th floor.}
     \label{fig:Error amplification diagram 8th}
 \end{figure}
 \subsection{Full corridor trajectory evaluation on the 7th floor}
@@ -607,7 +620,7 @@ EKF (w.r.t Ground Truth) & 0.740 & 1.551 \\
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\linewidth]{images/ir_full_circle.png}
-    \caption{Second phase indoor localization experimental path}
+    \caption{Second phase indoor localization experimental path.}
     \label{fig:Second phase indoor localization experimental path}
 \end{figure}
 \noindent As can be seen from \autoref{fig:ir_full_7}, Wi-Fi localization is greatly affected by the signal environment and exhibits obvious drift. Due to signal obstruction and the influence of smaller frequencies, the Wi-Fi localization trajectory is relatively tortuous and cannot provide a smooth trajectory. Especially on longer paths, the error is more significant, leading to a decrease in localization accuracy.\\
@@ -616,7 +629,7 @@ The EKF fusion method provides smoother and more accurate trajectories than sing
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{images/1/3.png}
-    \caption{Comparison of experimental results trajectories in the entire corridor on the 7th floor of the IR building}
+    \caption{Comparison of experimental results trajectories in the entire corridor on the 7th floor of the IR building.}
     \label{fig:ir_full_7}
 \end{figure}
 \noindent According to \autoref{tab:7th_floor_accuracy}, the MAE of Wi-Fi localization is 0.2251 and the MSE is 0.0778, indicating that the overall error is small. However, Wi-Fi localization showed large fluctuations in the experiment, which was due to factors such as signal obstruction and reflection. Wi-Fi localization is based on RSSI signals, which are greatly affected by obstacles and multipath effects, resulting in uneven or tortuous trajectories in some areas. Nevertheless, Wi-Fi localization can still provide relatively accurate location estimates at some times, thereby maintaining low MAE and MSE values.\\
@@ -638,8 +651,8 @@ EKF (w.r.t Ground Truth)    & 0.5290 & 0.6010 \\
 \noindent As shown in the enlarged view in \autoref{fig:error_full_7}, it can be clearly seen that the Wi-Fi localization trajectory has large fluctuations. At the same time, the IMU localization trajectory is slightly smoother than the Wi-Fi, but there are still errors. The IMU errors have a certain accumulation effect, causing the trajectory to deviate from the actual path. In comparison, it can be seen that the trajectory provided by EKF is smoother and more accurate than Wi-Fi and IMU.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.1\linewidth]{Amplification images/wifi/full_circle.png}
-    \caption{Enlarged image of the comparison error in the entire corridor on the 7th floor of the IR building}
+    \includegraphics[width=1\linewidth]{Amplification images/wifi/full_circle.png}
+    \caption{Enlarged image of the comparison error in the entire corridor on the 7th floor of the IR building.}
     \label{fig:error_full_7}
 \end{figure}
 \subsection{Evaluation under reversed start and end points}
@@ -647,7 +660,7 @@ EKF (w.r.t Ground Truth)    & 0.5290 & 0.6010 \\
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\linewidth]{images/ir_full_circle_inverse.png}
-    \caption{Indoor localization experiment path after changing location}
+    \caption{Indoor localization experiment path after changing location.}
     \label{fig:Indoor localization experiment path after changing location}
 \end{figure}
 \noindent\autoref{fig:Complete path comparison of IR building 7th floor experiment trajectory (start and end locations swapped)} shows the comparison results of the trajectories obtained by swapping the starting and ending positions along the complete corridor path on the 7th floor of the IR building. The experimental path remains consistent with the previous complete corridor experiment, with only the direction of movement altered. This is aimed at evaluating the system's stability and consistency under changes in path direction.\\
@@ -656,7 +669,7 @@ As can be seen from \autoref{fig:Complete path comparison of IR building 7th flo
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{images/1/0.png}
-    \caption{Complete path comparison of IR building 7th floor experiment trajectory (start and end locations swapped)}
+    \caption{Complete path comparison of IR building 7th floor experiment trajectory (start and end locations swapped).}
     \label{fig:Complete path comparison of IR building 7th floor experiment trajectory (start and end locations swapped)}
 \end{figure}
 
@@ -681,7 +694,7 @@ EKF (w.r.t Ground Truth) & 0.8830 & 1.9050 \\
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{Amplification images/wifi/full_circle_inverse.png}
-    \caption{Enlarged image of the comparison error in the entire corridor on the 7th floor of the IR building (start and end locations swapped)}
+    \caption{Enlarged image of the comparison error in the entire corridor on the 7th floor of the IR building (start and end locations swapped).}
     \label{fig:error_7_inverse}
 \end{figure}
 \section{Discussion and Limitations}
@@ -690,7 +703,7 @@ Despite the demonstrated effectiveness of the proposed fusion localization frame
 \begin{itemize}
     \item \textbf{Instability and limited generalization of Wi-Fi fingerprinting:} Although the Wi-Fi fingerprinting model performs robustly in most areas, the RSSI is highly susceptible to multipath propagation, obstruction, and environmental variations. These factors introduce considerable measurement uncertainty and hinder the model’s generalization across different locations. In particular, localization accuracy degrades significantly in areas with sparse reference points or strong signal occlusion. Additionally, the low update rate of Wi-Fi signals—typically on the order of seconds—limits the system’s responsiveness to rapid platform dynamics, resulting in delayed positional updates during fast movement or turning.
 
-    \item \textbf{Drift and error accumulation in IMU measurements:} The inertial measurement unit (IMU) provides high-frequency motion data with strong short-term responsiveness. However, its accelerometers and gyroscopes are vulnerable to noise and bias drift, leading to cumulative errors over time. Without timely correction from external observations (e.g., SLAM), the IMU’s estimations diverge from the true trajectory, which negatively affects the overall accuracy and robustness of the system.
+    \item \textbf{Drift and error accumulation in IMU measurements:} The inertial measurement unit (IMU) provides high-frequency motion data with strong short-term responsiveness. However, its accelerometers and gyroscopes are vulnerable to noise and bias drift, leading to cumulative errors over time. Without timely correction from external observations (e.g., SLAM), the IMU’s estimations diverge from the actual trajectory, which negatively affects the overall accuracy and robustness of the system.
 
     \item \textbf{Sensitivity of SLAM to dynamic and occluded environments:} Although SLAM contributes mid-frequency structural constraints, its loop-closure performance can be compromised in dynamic scenes or environments with significant occlusions. This weakens the consistency and accuracy of the state updates performed by the EKF.
 
@@ -742,4 +755,43 @@ Given the limitations of this study, future work can be further expanded and opt
 \bibliography{IEEEabrv,References}
 \newpage
 \appendix 
+\section{Appendix A : Localization experiment path}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/IR_6.drawio (1).png}
+    \caption{Localization experiment path on the 6th floor of the IR building.}
+    \label{fig:Localization experiment path on the 6th floor of the IR Building}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/IR_half_circle.png}
+    \caption{Localization experiment path on the 7th floor of the IR building.}
+    \label{fig:enter-label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{images/IR_8.drawio (1).png}
+    \caption{Localization experiment path on the 8th floor of the IR building.}
+    \label{fig:Localization experiment path on the 8th floor of the IR Building}
+\end{figure}
+\section{Appendix B : AGV-Based Data Collection Scenarios for Sensor Fusion in Indoor}
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/test/1.jpg}
+        \caption{}
+    \end{subfigure} \hfill
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/test/2.jpg}
+        \caption{}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/test/3.jpg}
+        \caption{}
+    \end{subfigure}
+\caption{AGV deployment scenarios for indoor localization using Wi-Fi and Lidar fusion.}
+\end{figure}
 \end{document}
