@@ -65,30 +65,32 @@
 }
 
 %%% macros and commands
-\newcommand{\comment}[2]{\todo[color=blue!20,inline,caption={}]{\textbf{\textsc{Comment~from~#1}}:~#2}}
-\newcommand{\response}[2]{\todo[color=red!20,inline,caption={}]{\textbf{\textsc{Response~from~#1}}:~#2}}
+\newcommand{\comment}[2]{\todo[color=blue!20,inline,caption={}]{\textbf{\textsc{Comment~from~#1}}:~#2}}%
+\newcommand{\response}[2]{\todo[color=red!20,inline,caption={}]{\textbf{\textsc{Response~from~#1}}:~#2}}%
 
 % 设置 \section 和 \subsection 的样式为 Times New Roman，字号分别为 20 和 16
 \titleformat{\section}[block]
-  {\normalfont\bfseries\fontfamily{ptm}\fontsize{20}{24}\selectfont} % 加粗 +ptm 是 Times 字体
-  {\thesection}{1em}{}
+{\normalfont\bfseries\fontfamily{ptm}\fontsize{20}{24}\selectfont} % 加粗 +ptm 是 Times 字体
+{\thesection}{1em}{}
 
 \titleformat{\subsection}[block]
-  {\normalfont\bfseries\fontfamily{ptm}\fontsize{16}{19}\selectfont} % 加粗 + ptm 是 Times 字体
-  {\thesubsection}{1em}{}
+{\normalfont\bfseries\fontfamily{ptm}\fontsize{16}{19}\selectfont} % 加粗 + ptm 是 Times 字体
+{\thesubsection}{1em}{}
   
   \begin{document}
   \onehalfspacing % 设置全文行距为1.5倍
 
 \begin{titlepage}
-  \centering \vspace*{-1cm}
+  \centering%
+  \vspace*{-1cm}%
   \includegraphics[width=0.7\textwidth]{images/xjtlu.png}
-  \vspace{1cm}
+  \vspace{1cm}%
 
-  {\large \textbf{SCHOOL OF ADVANCED TECHNOLOGY}}\\[0.3cm]
-  {\large \textbf{SAT301 FINAL YEAR PROJECT}}\\[3cm]
-  {\Large \textit{Indoor Localization Using Wi-Fi Fingerprinting and LiDAR Fusion with Extended Kalman Filter}}\\[2cm]
-  {\LARGE \textbf{Final Thesis}}\\[4cm]
+  {\large \textbf{SCHOOL OF ADVANCED TECHNOLOGY}}\\[0.3cm]%
+  {\large \textbf{SAT301 FINAL YEAR PROJECT}}\\[3cm]%
+  {\Large \textit{Indoor Localization and Navigation Based on Wi-Fi
+      Fingerprinting and LiDAR Fusion with Extended Kalman Filter}}\\[2cm]%
+  {\LARGE \textbf{Final Thesis}}\\[4cm]%
 
 \begin{center}
   \large
@@ -111,6 +113,7 @@
 % 内容表
 \end{titlepage}
 
+
 % 设置页面编号为罗马数字
 \pagenumbering{roman}
 %%%%%%%%%%%%
@@ -118,50 +121,65 @@
 %%%%%%%%%%%%
 \section*{Abstract}
 With the expansion of innovative spaces and the growing demand for indoor robot
-navigation, single Wi-Fi fingerprint-based localization methods, although
-low-cost and easy to deploy, are susceptible to multipath fading interference
-and have limited localization accuracy. In contrast, light detection and ranging
-(LiDAR) has centimeter-level ranging accuracy, but its high cost and complex
-deployment limit its large-scale application.
+navigation, Wi-Fi fingerprinting becomes the most popular and cost-efficient
+technique for indoor localization because it does not require additional
+hardware or infrastructure and, therefore, can be used in any environment
+equipped with Wi-Fi networks. The accuracy of indoor localization based on Wi-Fi
+RSSI fingerprinting, however, is limited due to the susceptibility of received
+signal strength indicator (RSSI) to multipath fading and shadowing. In contrast,
+light detection and ranging (LiDAR) can provide centimeter-level ranging
+accuracy but at the expense of higher cost and complex deployment.
+% limiting its large-scale application.
 
-This thesis proposes an indoor high-precision localization framework that
-integrates Wi-Fi fingerprint recognition, deep neural networks (DNNs),
-LiDAR-inertial measurement unit (IMU) odometers, and extended Kalman filters
-(EKFs). First, DNN is used to perform coarse localization on standardized Wi-Fi
-fingerprints to obtain preliminary position estimates. Then, a Gmapping-based
-simultaneous localization and mapping (SLAM) method is used to fuse IMU data,
-generate an occupancy grid map, and output high-frequency attitude
-information. Finally, a unified state vector and observation model are
-constructed, and an EKF prediction-update fusion structure is designed to fuse
-information from the three sensors to suppress Wi-Fi noise and cumulative drift
-errors of the IMU.
+This thesis proposes a high-precision indoor localization framework that
+integrates Wi-Fi fingerprinting, deep neural networks (DNNs), LiDAR-inertial
+measurement unit (IMU) odometers, and extended Kalman filters (EKFs). First, a
+DNN is used to perform coarse localization based on Wi-Fi RSSI fingerprints,
+providing preliminary position estimates. Then, a Gmapping-based simultaneous
+localization and mapping (SLAM) method is used to fuse IMU data, generate an
+occupancy grid map, and output high-frequency attitude information. Finally, a
+unified state vector and observation model is constructed, and an EKF
+prediction-update fusion structure is designed to fuse information from the
+three sensors to suppress Wi-Fi noise and cumulative drift errors of the IMU,
+% EKF performs state prediction and correction by linearizing the nonlinear
+% state transition and observation equations of the system and combining system
+% dynamics with actual observation data to achieve accurate state estimation.
+% In this study, EKF is used to fuse the attitude information from Wi-Fi, LiDAR,
+% and IMU,
+which significantly improves the robustness and accuracy of the overall
+localization system in complex environments.
 
-\nomenclature{LiDAR}{Light Detection and Ranging} \nomenclature{DNNs}{Deep
-  Neural Networks} \nomenclature{IMU}{Inertial Measurement Unit}
-\nomenclature{EKF}{Extended Kalman Filter} \nomenclature{SLAM}{Simultaneous
-  Localization and Mapping}
+\nomenclature{RSSI}{Received Signal Strength Indicator}%
+\nomenclature{LiDAR}{Light Detection and Ranging}%
+\nomenclature{DNNs}{Deep Neural Networks}%
+\nomenclature{IMU}{Inertial Measurement Unit}%
+\nomenclature{EKF}{Extended Kalman Filter}%
+\nomenclature{SLAM}{Simultaneous Localization and Mapping}%
 
-Extended Kalman filtering performs state prediction and correction by
-linearizing the nonlinear state transition and observation equations of the
-system and combining system dynamics with actual observation data to achieve
-accurate state estimation. In this study, EKF is used to fuse the attitude
-information from Wi-Fi, LiDAR, and IMU, significantly improving the robustness
-and accuracy of the overall localization system in complex environments.
-
-In experiments conducted on the 6th to 8th floors of the IR Building at Xi'an
-Jiaotong-Liverpool University, comparisons between pure Wi-Fi, pure IMU, and EKF
-fusion schemes revealed that Wi-Fi localization was subject to significant
-trajectory fluctuations due to device frequency limitations and environmental
-interference, resulting in limited localization accuracy. Meanwhile, IMU
-trajectories exhibited gradually declining localization accuracy due to
-cumulative errors and gradual drift. In contrast, the EKF fusion scheme
-demonstrated better smoothness and stability, effectively suppressing Wi-Fi and
-IMU errors and maintaining high accuracy and robustness. Experimental results
-indicate that the EKF fusion scheme maintains trajectory stability in complex
-environments, validating its adaptability. It also demonstrates significantly
-lower localization errors than single-source solutions, proving the
-effectiveness of multi-source information fusion in enhancing localization
-accuracy and system stability.
+A comparative analysis of pure Wi-Fi, pure IMU, and EKF fusion schemes was
+carried out based on the real experiments on the 6th to 8th floors of the IR
+Building at Xi'an Jiaotong-Liverpool University, whose results demonstrate that
+the proposed EKF fusion scheme can provide higher localization accuracy and
+thereby smooth and robust trajectories through multi-source information fusion;
+the pure Wi-Fi scheme, on the other hand, is subject to significant trajectory
+fluctuations due to device frequency limitations and environmental interference,
+resulting in limited localization accuracy, while the pure IMU scheme suffers
+from gradually declining localization accuracy in trajectory estimation due to
+cumulative errors and gradual drift.
+% In experiments conducted on the 6th to 8th floors of the IR Building at Xi’an
+% Jiaotong- Liverpool University, comparisons between pure Wi-Fi, pure IMU, and
+% EKF fusion schemes revealed that Wi-Fi localization was subject to significant
+% trajectory fluctuations due to device frequency limitations and environmental
+% interference, resulting in limited localization accuracy. Meanwhile, IMU
+% trajectories exhibited gradually declining localization accuracy due to
+% cumulative errors and gradual drift. In contrast, the EKF fusion scheme
+% demonstrated better smoothness and stability, effectively suppressing Wi-Fi
+% and IMU errors and maintaining high accuracy and robustness. Experimental
+% results indicate that the EKF fusion scheme maintains trajectory stability in
+% complex environments, validating its adaptability. It also demonstrates
+% significantly lower localization errors than single-source solutions, proving
+% the effectiveness of multi-source information fusion in enhancing localization
+% accuracy and system stability.
 
 \vspace{0.5cm}%
 \noindent%
@@ -330,7 +348,7 @@ powerful solution suitable for complex indoor environments.
 \item \textit{DNN-based Wi-Fi localization} : This study proposes a Wi-Fi
   localization method based on deep neural networks (DNN) that achieves higher
   accuracy in indoor localization by learning the relationship between Wi-Fi
-  signal strength (RSSI) and location.
+  signal strength indicator (RSSI) and location.
     
 \item \textit{Gmapping-based SLAM algorithm} : This study uses a Gmapping-based
   SLAM algorithm combined with LiDAR data to achieve efficient real-time
@@ -631,8 +649,9 @@ localization accuracy and robustness.
 \subsection{Wi-Fi Fingerprint-based localization using Deep Neural Networks }
 On the basis of multi-source data collection and system integration, this study
 further constructed a Deep Neural Networks (DNNs) model based on Wi-Fi Received
-Signal Strength Indication (RSSI) \nomenclature{RSSI}{Received Signal Strength
-  Indication} fingerprints to achieve regression prediction of the platform's
+Signal Strength Indicator (RSSI)
+% \nomenclature{RSSI}{Received Signal Strength Indicator}
+fingerprints to achieve regression prediction of the platform's
 two-dimensional location. The model aims to characterize the nonlinear mapping
 relationship between RSSI signal strength and physical space coordinates, and to
 model high-dimensional RSSI feature vectors through a supervised learning
