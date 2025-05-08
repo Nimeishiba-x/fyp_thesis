@@ -242,31 +242,36 @@ persevere in pursuing and achieving my goals.
 
 \pagenumbering{arabic}
 \section{Introduction}
-Global Positioning System (GPS) \nomenclature{GPS}{Global Positioning System} is
-widely known for its high accuracy and broad applicability in outdoor
-environments. However, its limitations in indoor environments have also been
-well documented~\cite{wahab2022indoor}. GPS signals are transmitted by
-satellites and face significant challenges in indoor spaces because they must
-penetrate physical obstacles such as walls and ceilings. The complexity of this
-transmission path causes severe signal attenuation, making it challenging to
-maintain a stable connection. In addition, multipath interference caused by
-reflections from surfaces such as walls and metal objects introduces additional
-time delays and computational errors, further reducing localization
-accuracy~\cite{wahab2022indoor}. These challenges have prompted researchers to
-develop alternative indoor localization technologies aimed at overcoming these
-limitations and providing accurate and efficient solutions for indoor
-environments.
+\label{sec:introduction}
+\hl{Global Positioning System (GPS)} \nomenclature{GPS}{Global Positioning
+  System} is widely known for its high accuracy and broad applicability in
+outdoor environments. However, its limitations in indoor environments have also
+been well known in the literature~\cite{wahab2022indoor}.
+%%%
+\comment{Joseph}{There are inconsistencies in abbreviations throughout the
+  thesis (e.g., ``Globel Positioning System (GPS) ... '' vs. ``Global
+  positioning system (GPS) ...''. Please, stick to one style, not mixing
+  multiple ones.}%
+%%%
+GPS signals are transmitted by satellites and face significant challenges in
+indoor spaces because they must penetrate physical obstacles such as walls and
+ceilings. The complexity of this transmission path causes severe signal
+attenuation, making it challenging to maintain a stable connection. In addition,
+multipath interference caused by reflections from surfaces such as walls and
+metal objects introduces additional time delays and computational errors,
+further reducing localization accuracy~\cite{wahab2022indoor}. These challenges
+have prompted researchers to develop alternative indoor localization
+technologies aimed at overcoming these limitations and providing accurate and
+efficient solutions for indoor environments.
 
 With the continuous development of modern indoor localization technologies,
 including Wi-Fi, Bluetooth Low Energy (BLE), Ultra Wide Band (UWB), and inertial
-measurement units (IMUs), significant progress has been made in many
-fields~\cite{guo2019survey}. These technologies have significantly improved the
-accuracy and efficiency of indoor localization by adopting advanced methods such
-as triangulation, fingerprint recognition, and sensor fusion. As shown
-in~\autoref{fig:Illustration of UWB and Wi-Fi hybrid localization system}, a
-typical UWB and Wi-Fi hybrid localization system contains a variety of
-observation data.
-
+measurement units (IMUs), significant progress has been made to improve the
+accuracy and efficiency of indoor localization through advanced methods such as
+triangulation, fingerprint recognition, and sensor
+fusion~\cite{guo2019survey}. As shown in~\autoref{fig:Illustration of UWB and
+  Wi-Fi hybrid localization system}, a typical UWB and Wi-Fi hybrid localization
+system contains a variety of observation data.
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\linewidth]{images/intro.png}
@@ -275,35 +280,35 @@ observation data.
   \label{fig:Illustration of UWB and Wi-Fi hybrid localization system}
 \end{figure}
 
-In addition, indoor localization technology is widely used in the medical field
-for hospital material management and medical resource tracking, thereby
-improving the efficiency of medical services~\cite{HOSSAIN20151}. Similarly,
-emergency responders (such as firefighters) use these technologies to navigate
-in complex and unfamiliar environments, significantly improving task efficiency
-and safety~\cite {fischer2010location}. In addition, recent advances have
-expanded the application of indoor localization systems to smart cities, helping
-urban infrastructure management and public safety through real-time tracking and
+As for applications, for example, indoor localization technologies are widely
+used for hospital material management and medical resource tracking in improving
+the efficiency of medical services~\cite{HOSSAIN20151} and by emergency
+responders (such as firefighters) in navigating in complex and unfamiliar
+environments to improveng task efficiency and safety~\cite
+{fischer2010location}. In addition, recent advances have expanded the
+application of indoor localization systems to smart cities, helping urban
+infrastructure management and public safety through real-time tracking and
 monitoring of assets and personnel~\cite{zhang2020smartcity}. These technologies
 have also shown significant results in the retail industry, improving the
 customer experience through location-based services (such as precision marketing
 and inventory management)~\cite{chen2019indoor}.
 
-Due to the limitations of GPS in indoor environments, indoor localization
-technology has become a key solution for achieving high-precision localization
-due to its flexibility, adaptability, and wide range of applications. In the
-following section, I introduce a new indoor localization solution and briefly
-describe how it is based on Wi-Fi fingerprinting, SLAM and LiDAR fusion, and EKF
-technology.
+Due to the limitations of GPS in indoor environments, the alternative
+technologies discussed above have become a key to providing localization
+services indoors due to their flexibility, adaptability, and wide range of
+applications. In the following section, I introduce a new indoor localization
+solution and briefly describe how it is based on Wi-Fi fingerprinting, SLAM and
+LiDAR fusion, and EKF technology.
 
 \subsection{Problem Statement}
-Currently, typical indoor localization technologies each have their
-characteristics and limitations. UWB technology measures the propagation time by
+Currently, each of typical indoor localization technologies has its own
+advantages and disadvantages. UWB technology measures the propagation time by
 sending high-frequency pulse signals and has exceptionally high localization
 accuracy~\cite{fontana2004recent}. However, walls and obstacles easily block UWB
 radio frequency signals, and signals can rapidly attenuate, especially in indoor
 environments where multipath effects are significant. In addition, UWB
 technology requires high hardware costs and dense installation infrastructure,
-limiting its popularity in specific applications~\cite{farahsari2022survey}.
+limiting its applicability to specific environments~\cite{farahsari2022survey}.
 
 Wi-Fi localization is a low-cost and easy-to-deploy indoor localization
 technology that mainly uses Wi-Fi fingerprinting or time difference of arrival
@@ -331,12 +336,14 @@ making it particularly suitable for use in environments where GPS signals cannot
 be received, such as underground facilities, tunnels, or
 indoors~\cite{wu2015indoor}.
 
-Single indoor localization technologies have their advantages and disadvantages,
-but by integrating multiple sensor data, especially Wi-Fi and IMU, their
-limitations can be effectively compensated for, thereby achieving longer, more
-continuous, and more accurate localization. Currently, most research focuses on
-PDR/Wi-Fi fusion localization methods~\cite{liu2021kalman}, but IMU/Wi-Fi fusion
-methods based on EKF are still rare.
+% Single indoor localization technologies have their advantages and disadvantages,
+By integrating multiple sensor data, especially Wi-Fi and IMU, the limitations
+of invididual data and technologies can be effectively compensated for, thereby
+achieving longer, more continuous, and more accurate localization. Currently,
+most research focuses on pedestrian dead reckoning (PDR)/Wi-Fi
+\nomenclature{PDR}{Pedestrian Dead Reckoning} fusion localization
+methods~\cite{liu2021kalman}, but IMU/Wi-Fi fusion methods based on EKF are
+still rare.
 
 \subsection{Contributions}
 The objective of this study is to develop a new indoor localization system that
@@ -345,45 +352,52 @@ dynamic environments. Specifically, this study addresses the limitations of
 existing technologies in terms of accuracy and adaptability, providing a more
 powerful solution suitable for complex indoor environments.
 \begin{itemize}
-\item \textit{DNN-based Wi-Fi localization} : This study proposes a Wi-Fi
-  localization method based on deep neural networks (DNN) that achieves higher
+\item \textit{DNN-based Wi-Fi fingerprinting}: This study proposes a Wi-Fi
+  fingerprinting based on deep neural networks (DNN) that achieves higher
   accuracy in indoor localization by learning the relationship between Wi-Fi
   signal strength indicator (RSSI) and location.
     
-\item \textit{Gmapping-based SLAM algorithm} : This study uses a Gmapping-based
+\item \textit{Gmapping-based SLAM algorithm}: This study uses a Gmapping-based
   SLAM algorithm combined with LiDAR data to achieve efficient real-time
   localization and environment mapping, improving the system's adaptability in
   dynamic environments.
     
-\item \textit{Extended Kalman filter data fusion} : This study uses EKF to fuse
-  data from multiple sensors such as Wi-Fi, LiDAR, and IMU, further improving
-  the accuracy and stability of the indoor localization system. In particular,
-  it can effectively reduce errors and signal drift in complex dynamic
-  environments.
+\item \textit{EKF-based data fusion}: This study uses EKF to fuse data from
+  multiple sensors such as Wi-Fi, LiDAR, and IMU, further improving the accuracy
+  and stability of the indoor localization system. In particular, it can
+  effectively reduce errors and signal drift in complex dynamic environments.
     
-\item \textit{Verification of system performance through actual experiments} :
+\item \textit{Verification of system performance through actual experiments}:
   This study demonstrates the application effectiveness and practical
   feasibility of the proposed system in complex indoor scenarios through
   experiments conducted in actual indoor environments.
 \end{itemize}
 
 \subsection{Thesis Outline}
-This thesis is divided into six parts. The first part is the introduction, which
-provides the overall background and motivation for the project. The second part
-is a literature review, which comprehensively reviews the progress of indoor
-localization technology, data set construction, sensor fusion methods, and the
-application of EKF in indoor localization. The third part introduces in detail
-the specific methods used in this study, including Wi-Fi localization, LiDAR
-data processing, and EKF data fusion technologies. The fourth part presents the
-experimental results and evaluates the localization accuracy and stability of
-the system in different environments. The fifth part discusses the results of
-the entire project, analyzes the advantages and limitations of the method, and
-proposes directions for improvement. Finally, the sixth part summarizes the main
-contributions of this research and gives prospects for future research.
-
+The thesis is structured as follows: \hl{Section}~\ref{sec:introduction}
+introduces the overall background and motivation for the
+project. Section~\ref{sec:literature-review} provides a literature review, which
+comprehensively reviews the progress of indoor localization technology, data set
+construction, sensor fusion methods, and the application of EKF in indoor
+localization. Section~\ref{sec:methodology} describes in detail the specific
+methods used in this study, including Wi-Fi localization, LiDAR data processing,
+and EKF data fusion technologies. Section~\ref{sec:experimental-results}
+presents the experimental results and evaluates the localization accuracy and
+stability of the system in different environments. Section~\ref{sec:disc-limit}
+discusses the results of the entire project, analyzes the advantages and
+limitations of the method, and proposes directions for improvement. Finally,
+Section~\ref{sec:concl-future-work} concludes the work presented in this thesis
+and gives prospects for future research.
+%%%
+\comment{Joseph}{Chapters are used as the highest unit in theses, but you base
+  this thesis on the \LaTeX{} \textit{article} class, where there is no
+  chapter. Consider changing it  to \textit{book} class. Also, it would be a
+  good idea to provide hyperlinks to the chapters.}%
+%%%
 
 \newpage
 \section{Literature Review}
+\label{sec:literature-review}
 In recent years, indoor localization technology has gradually become a hot topic
 of research in academia and industry due to its key role in applications such as
 smart city construction, indoor navigation, and the Internet of Things
@@ -584,6 +598,7 @@ in large-scale, low-cost application scenarios.
 
 \newpage
 \section{Methodology}
+\label{sec:methodology}
 \subsection{Data processing and integration process}
 In order to achieve a high-precision and robust indoor localization system, this
 thesis designs and implements a localization method framework that integrates
@@ -1170,6 +1185,7 @@ complex environments.
 
 \newpage
 \section{Experimental Results}
+\label{sec:experimental-results}
 All experiments in this study were conducted on a mobile AGV platform equipped
 with NVIDIA Jetson computing modules, 2D LiDAR, an inertial measurement unit
 (IMU), and a Wi-Fi receiver, as shown in~\autoref{fig:Hardware platform
@@ -1586,6 +1602,7 @@ consistency in this area, accurately following the actual movement path.
   
 \newpage  
 \section{Discussion and Limitations}
+\label{sec:disc-limit}
 Despite the demonstrated effectiveness of the proposed fusion localization
 framework, several limitations remain that warrant further investigation:
 
@@ -1635,6 +1652,7 @@ framework, several limitations remain that warrant further investigation:
 
 \newpage
 \section{Conclusion and Future work}
+\label{sec:concl-future-work}
 \subsection{Conclusion}
 In summary, this study proposes and evaluates a robust multi-sensor indoor
 localization system. The main conclusions are as follows:
